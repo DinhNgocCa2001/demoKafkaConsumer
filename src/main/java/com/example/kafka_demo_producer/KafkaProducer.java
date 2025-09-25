@@ -1,15 +1,14 @@
-package com.example.KafkaDemoProducer;
+package com.example.kafka_demo_producer;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class KafkaProducer {
     KafkaTemplate<String, String> kafkaTemplate;
@@ -25,11 +24,11 @@ public class KafkaProducer {
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                System.out.println("Sent message=[" + message +
-                        "] with offset=[" + result.getRecordMetadata().offset() + "]");
+                String logMessage = "Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]";
+                log.info(logMessage);
             } else {
-                System.out.println("Unable to send message=[" +
-                        message + "] due to : " + ex.getMessage());
+                String logMessage = "Unable to send message=[" + message + "] due to : " + ex.getMessage();
+                log.error(logMessage);
             }
         });
     }

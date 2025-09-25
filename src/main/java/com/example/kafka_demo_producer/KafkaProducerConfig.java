@@ -1,4 +1,4 @@
-package com.example.KafkaDemoProducer;
+package com.example.kafka_demo_producer;
 
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;

@@ -1,4 +1,4 @@
-package com.example.KafkaDemoProducer;
+package com.example.kafka_demo_producer;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

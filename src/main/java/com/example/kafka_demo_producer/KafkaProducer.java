@@ -1,34 +1,37 @@
 package com.example.kafka_demo_producer;
 
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Component
 public class KafkaProducer {
-    KafkaTemplate<String, String> kafkaTemplate;
 
+    @NonFinal
+    @Value("${kafka.topic}")
     String topicName;
 
-    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate, String topicName) {
+    private final KafkaTemplate<String, String> kafkaTemplate;
+
+    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.topicName = topicName;
     }
 
     public void sendMessage(String message) {
         CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topicName, message);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                String logMessage = "Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]";
-                log.info(logMessage);
+                String mesLogging = "Sent message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]";
+                log.info(mesLogging);
             } else {
-                String logMessage = "Unable to send message=[" + message + "] due to : " + ex.getMessage();
-                log.error(logMessage);
+                String mesLogging = "Unable to send message=[" + message + "] due to : " + ex.getMessage();
+                log.error(mesLogging);
             }
         });
     }

@@ -22,15 +22,6 @@ public class KafkaProducerConfig {
     @Value("${kafka.bootstrap-servers}")
     String bootstrapServers;
 
-    @NonFinal
-    @Value("${kafka.topic}")
-    String topic;
-
-    @Bean
-    public KafkaProducer kafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
-        return new KafkaProducer(kafkaTemplate, topic);
-    }
-
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
